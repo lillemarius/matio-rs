@@ -14,13 +14,6 @@ impl<'a> MatFileInfo<'a> {
         }
     }
 
-    pub fn name(&self) -> &str {
-        self.name
-    }
-
-    pub fn dims(&self) -> &[u64] {
-        self.dims.as_slice()
-    }
 }
 
 /// Mat file
