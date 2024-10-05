@@ -44,7 +44,7 @@ impl<'a> MatFileRead<'a> {
             // self.info();
             Ok(MatFileInfo::new(name, dims))
         } else {
-            Err(MatioError::InfoNotFound(self.name))
+            Err(MatioError::InfoNotFound)
         }
     }
 }

@@ -178,8 +178,8 @@ pub enum MatioError {
     FieldName(#[from] std::str::Utf8Error),
     #[error("Field {0} not found")]
     FieldNotFound(String),
-    #[error("reading mat file {0} info failed")]
-    InfoNotFound(String),
+    #[error("reading mat file info failed")]
+    InfoNotFound,
     #[error("expected rank 2, found {0}")]
     Rank(usize),
 }
