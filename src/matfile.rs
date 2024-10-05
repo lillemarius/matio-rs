@@ -1,6 +1,20 @@
 use crate::{MatioError, Result};
 use std::{fs, io, marker::PhantomData, ops::Deref, path::Path, ptr};
 
+/// Mat file info
+pub struct MatFileInfo<'a> {
+    pub name: &'a str,
+    pub dims: Vec<u64>
+}
+impl<'a> MatFileInfo<'a> {
+    fn new(name: &str, dims: Vec<u64>) -> Self {
+        Self {
+            name,
+            dims
+        }
+    }
+}
+
 /// Mat file
 pub struct MatFile<'a> {
     pub(crate) mat_t: *mut ffi::mat_t,
@@ -16,7 +30,7 @@ impl<'a> Deref for MatFileRead<'a> {
 }
 impl<'a> MatFileRead<'a> {
     /// Returns the list of variables within a [MatFile]
-    pub fn info(&self) {
+    pub fn info(&self) -> Result<MatFileInfo<'a>, MatioError>{
         let matvar_t = unsafe { ffi::Mat_VarReadNextInfo(self.mat_t) };
         if !matvar_t.is_null() {
             let name = unsafe { std::ffi::CStr::from_ptr((*matvar_t).name) };
@@ -26,12 +40,11 @@ impl<'a> MatFileRead<'a> {
                 ptr::copy((*matvar_t).dims as *mut _, dims.as_mut_ptr(), rank);
                 dims.set_len(rank);
             }
-            println!(
-                "Matlab var.: {:?} with dims: {:?}",
-                name.to_str().unwrap(),
-                dims
-            );
-            self.info();
+            let name = name.to_str().unwrap();
+            // self.info();
+            Ok(MatFileInfo::new(name, dims))
+        } else {
+            MatioError::InfoNotFound(self.name)
         }
     }
 }
