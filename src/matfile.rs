@@ -7,7 +7,7 @@ pub struct MatFileInfo<'a> {
     pub dims: Vec<u64>
 }
 impl<'a> MatFileInfo<'a> {
-    fn new(name: &str, dims: Vec<u64>) -> Self {
+    fn new(name: &'a str, dims: Vec<u64>) -> Self {
         Self {
             name,
             dims
@@ -44,7 +44,7 @@ impl<'a> MatFileRead<'a> {
             // self.info();
             Ok(MatFileInfo::new(name, dims))
         } else {
-            MatioError::InfoNotFound(self.name)
+            Err(MatioError::InfoNotFound(self.name))
         }
     }
 }
