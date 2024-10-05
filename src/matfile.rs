@@ -30,7 +30,7 @@ impl<'a> Deref for MatFileRead<'a> {
 }
 impl<'a> MatFileRead<'a> {
     /// Returns the list of variables within a [MatFile]
-    pub fn info(&self) -> Result<MatFileInfo<'a>, MatioError>{
+    pub fn info(&self) -> Result<MatFileInfo<'a>>{
         let matvar_t = unsafe { ffi::Mat_VarReadNextInfo(self.mat_t) };
         if !matvar_t.is_null() {
             let name = unsafe { std::ffi::CStr::from_ptr((*matvar_t).name) };
